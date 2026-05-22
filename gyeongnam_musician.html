@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>야구장에서 만나는 경남뮤지션</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #0a0a0f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Sans KR', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 배경 그라디언트 효과 */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(20, 60, 120, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(80, 20, 80, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 20%, rgba(120, 40, 20, 0.2) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 별빛 파티클 */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: var(--op, 0.6); transform: scale(1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    /* 상단 서브 텍스트 */
+    .sub-title {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: rgba(180, 200, 255, 0.9);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+    }
+
+    /* LP 플레이어 래퍼 */
+    .lp-wrapper {
+      position: relative;
+      width: 320px;
+      height: 320px;
+    }
+
+    /* 외부 글로우 링 */
+    .lp-glow {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(100, 140, 255, 0.15) 0%, transparent 70%);
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    /* LP 레코드 본체 */
+    .lp-record {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      animation: spinRecord 4s linear infinite;
+      cursor: pointer;
+    }
+
+    @keyframes spinRecord {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* SVG 레코드 */
+    .lp-record svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 20px rgba(80, 120, 255, 0.4)) drop-shadow(0 0 40px rgba(60, 80, 200, 0.2));
+    }
+
+    /* 바늘 (토암) */
+    .tonearm {
+      position: absolute;
+      top: -10px;
+      right: -30px;
+      width: 90px;
+      height: 110px;
+      z-index: 10;
+      transform-origin: 70px 10px;
+      animation: tonearmSwing 4s ease-in-out infinite alternate;
+    }
+    @keyframes tonearmSwing {
+      0% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* 사운드 웨이브 이펙트 */
+    .sound-waves {
+      position: absolute;
+      inset: -40px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .wave-ring {
+      position: absolute;
+      inset: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(100, 150, 255, 0.3);
+      animation: waveExpand var(--delay, 2s) ease-out infinite;
+    }
+    .wave-ring:nth-child(2) { --delay: 2.7s; }
+    .wave-ring:nth-child(3) { --delay: 3.4s; }
+    @keyframes waveExpand {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(2); opacity: 0; }
+    }
+
+    /* 메인 타이틀 */
+    .main-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(22px, 5vw, 34px);
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.4;
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 40px rgba(120, 160, 255, 0.5);
+    }
+    .main-title .highlight {
+      background: linear-gradient(135deg, #7eb3ff 0%, #c084fc 50%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* CTA 버튼 */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 40px;
+      background: linear-gradient(135deg, #1a3a7a 0%, #2d1f5e 50%, #4a1942 100%);
+      border: 1px solid rgba(120, 160, 255, 0.4);
+      border-radius: 60px;
+      color: #ffffff;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      box-shadow:
+        0 0 30px rgba(80, 120, 255, 0.3),
+        0 4px 20px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(120,160,255,0.15) 0%, rgba(200,100,255,0.1) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .cta-btn:hover::before {
+      opacity: 1;
+    }
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: rgba(160, 200, 255, 0.7);
+      box-shadow:
+        0 0 50px rgba(100, 140, 255, 0.5),
+        0 8px 30px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .cta-btn:active {
+      transform: translateY(-1px) scale(0.99);
+    }
+
+    /* 버튼 아이콘 (뮤직 노트) */
+    .btn-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    /* 버튼 화살표 */
+    .btn-arrow {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.7;
+      transition: transform 0.3s ease;
+    }
+    .cta-btn:hover .btn-arrow {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+
+    /* 하단 데코 */
+    .footer-deco {
+      font-size: 11px;
+      color: rgba(150, 170, 220, 0.4);
+      letter-spacing: 3px;
+    }
+
+    /* 모바일 대응 */
+    @media (max-width: 480px) {
+      .lp-wrapper { width: 260px; height: 260px; }
+      .cta-btn { padding: 16px 30px; font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 별빛 배경 -->
+  <div class="stars" id="stars"></div>
+
+  <div class="container">
+    <p class="sub-title">2026 &nbsp;·&nbsp; MUSISIS</p>
+
+    <!-- LP 플레이어 -->
+    <div class="lp-wrapper">
+      <div class="lp-glow"></div>
+
+      <!-- 사운드 웨이브 -->
+      <div class="sound-waves">
+        <div class="wave-ring"></div>
+        <div class="wave-ring"></div>
+        <div class="wave-ring"></div>
+      </div>
+
+      <!-- 레코드 본체 (SVG) -->
+      <div class="lp-record">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- 레코드 그라디언트 -->
+            <radialGradient id="recordGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#2a2a3e"/>
+              <stop offset="30%" stop-color="#1a1a2e"/>
+              <stop offset="70%" stop-color="#0f0f1a"/>
+              <stop offset="100%" stop-color="#050508"/>
+            </radialGradient>
+            <!-- 그루브 그라디언트 -->
+            <radialGradient id="grooveLight" cx="40%" cy="35%" r="60%">
+              <stop offset="0%" stop-color="rgba(100,130,255,0.12)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+            <!-- 라벨 그라디언트 -->
+            <radialGradient id="labelGrad" cx="50%" cy="40%" r="55%">
+              <stop offset="0%" stop-color="#1e3a6e"/>
+              <stop offset="40%" stop-color="#162b55"/>
+              <stop offset="100%" stop-color="#0d1f3c"/>
+            </radialGradient>
+            <!-- 중앙 홀 -->
+            <radialGradient id="holeGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#1a1a2e"/>
+              <stop offset="100%" stop-color="#050508"/>
+            </radialGradient>
+            <!-- 반사광 -->
+            <linearGradient id="shineGrad" x1="20%" y1="10%" x2="80%" y2="90%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.06)"/>
+              <stop offset="50%" stop-color="rgba(255,255,255,0.02)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 레코드 베이스 -->
+          <circle cx="150" cy="150" r="148" fill="url(#recordGrad)" stroke="#1a1a2e" stroke-width="1"/>
+
+          <!-- 그루브 라인들 (촘촘하게) -->
+          <circle cx="150" cy="150" r="145" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="140" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="134" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="128" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="122" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="116" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="110" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="104" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="98" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="92" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="86" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
+
+          <!-- 그루브 반사광 -->
+          <circle cx="150" cy="150" r="148" fill="url(#grooveLight)"/>
+
+          <!-- 레코드 라벨 (중앙 원) -->
+          <circle cx="150" cy="150" r="60" fill="url(#labelGrad)"/>
+          <circle cx="150" cy="150" r="60" fill="none" stroke="rgba(100,150,255,0.3)" stroke-width="1"/>
+
+          <!-- 라벨 내부 장식 -->
+          <circle cx="150" cy="150" r="55" fill="none" stroke="rgba(100,150,255,0.15)" stroke-width="0.5"/>
+
+          <!-- 라벨 텍스트 영역 -->
+          <text x="150" y="138" text-anchor="middle" fill="rgba(160,200,255,0.9)" font-size="8" font-family="sans-serif" letter-spacing="2" font-weight="bold">GYEONGNAM</text>
+          <text x="150" y="152" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-size="9.5" font-family="sans-serif" letter-spacing="1.5" font-weight="bold">MUSICIANS</text>
+          <text x="150" y="164" text-anchor="middle" fill="rgba(180,200,255,0.7)" font-size="6.5" font-family="sans-serif" letter-spacing="1">BASEBALL STADIUM</text>
+
+          <!-- 라벨 하단 장식선 -->
+          <line x1="120" y1="170" x2="180" y2="170" stroke="rgba(100,150,255,0.3)" stroke-width="0.5"/>
+
+          <!-- 중앙 홀 -->
+          <circle cx="150" cy="150" r="6" fill="url(#holeGrad)" stroke="rgba(100,150,255,0.4)" stroke-width="0.5"/>
+
+          <!-- 전체 반사광 오버레이 -->
+          <circle cx="150" cy="150" r="148" fill="url(#shineGrad)"/>
+        </svg>
+      </div>
+
+      <!-- 토암 (바늘) -->
+      <svg class="tonearm" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="armGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#b0c4ff"/>
+            <stop offset="100%" stop-color="#6080c0"/>
+          </linearGradient>
+        </defs>
+        <!-- 피벗 -->
+        <circle cx="70" cy="10" r="6" fill="#8090b0" stroke="#c0d0f0" stroke-width="1"/>
+        <circle cx="70" cy="10" r="3" fill="#c0d0f0"/>
+        <!-- 암 -->
+        <path d="M70,16 Q55,40 35,80 L30,95" stroke="url(#armGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- 헤드쉘 -->
+        <rect x="22" y="92" width="14" height="7" rx="2" fill="#8090b0" stroke="#c0d0f0" stroke-width="0.5" transform="rotate(-10, 29, 95)"/>
+        <!-- 바늘 -->
+        <line x1="29" y1="99" x2="28" y2="107" stroke="#e0e8ff" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- 메인 타이틀 -->
+    <h1 class="main-title">
+      <span class="highlight">야구장에서 만나는</span><br/>
+      경남뮤지션
+    </h1>
+
+    <!-- CTA 버튼 -->
+    <a class="cta-btn" href="https://www.youtube.com/playlist?list=PLxrAFEXLjQHD_YtWLJokW_3VpqhD0H0D8" target="_blank" rel="noopener noreferrer">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18V5l12-2v13" stroke="rgba(180,210,255,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="6" cy="18" r="3" stroke="rgba(180,210,255,0.9)" stroke-width="1.5"/>
+        <circle cx="18" cy="16" r="3" stroke="rgba(180,210,255,0.9)" stroke-width="1.5"/>
+      </svg>
+      플레이리스트 듣기
+      <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 12h14M13 6l6 6-6 6" stroke="rgba(180,210,255,0.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+
+    <p class="footer-deco">♪ &nbsp; LIVE MUSIC &nbsp; · &nbsp; ENJOY THE GAME &nbsp; ♪</p>
+  </div>
+
+  <script>
+    // 별빛 생성
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2.5 + 0.5;
+      star.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${Math.random() * 100}%;
+        top: ${Math.random() * 100}%;
+        --dur: ${Math.random() * 3 + 2}s;
+        --op: ${Math.random() * 0.5 + 0.2};
+        animation-delay: ${Math.random() * 4}s;
+      `;
+      starsContainer.appendChild(star);
+    }
+
+    // LP 클릭 시 속도 변화
+    const lpRecord = document.querySelector('.lp-record');
+    let fast = false;
+    lpRecord.addEventListener('click', () => {
+      fast = !fast;
+      lpRecord.style.animationDuration = fast ? '1s' : '4s';
+    });
+  </script>
+</body>
+</html>
