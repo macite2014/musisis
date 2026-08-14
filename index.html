@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>야구장에서 만나는 경남뮤지션</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>페스티벌에서 만나는 경남뮤지션</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&family=Black+Han+Sans&display=swap');
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       min-height: 100vh;
-      background: #0a0a0f;
+      background: #1a4a24;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -25,36 +21,49 @@
       position: relative;
     }
 
-    /* 배경 그라디언트 효과 */
+    /* ── 배경 — 숲 느낌 그라디언트 ── */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(20, 60, 120, 0.35) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(80, 20, 80, 0.25) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 80% 20%, rgba(120, 40, 20, 0.2) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(232,245,51,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 15% 85%, rgba(30,107,46,0.6) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 55% at 85% 80%, rgba(26,75,36,0.7) 0%, transparent 60%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* 별빛 파티클 */
-    .stars {
+    /* ── 배경 음표 파티클 ── */
+    .notes-bg {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
+      overflow: hidden;
     }
-    .star {
+    .note-p {
       position: absolute;
-      border-radius: 50%;
-      background: #fff;
-      animation: twinkle var(--dur, 3s) ease-in-out infinite;
-      opacity: 0;
+      color: rgba(232,245,51,0.12);
+      font-size: 32px;
+      font-weight: 900;
+      animation: floatNote var(--nd, 6s) ease-in-out infinite;
+      animation-delay: var(--dl, 0s);
     }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.5); }
-      50% { opacity: var(--op, 0.6); transform: scale(1); }
+    @keyframes floatNote {
+      0%, 100% { transform: translateY(0) rotate(-5deg); opacity: 0.1; }
+      50%       { transform: translateY(-20px) rotate(5deg); opacity: 0.25; }
+    }
+
+    /* ── 나무 실루엣 배경 ── */
+    .trees-bg {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 220px;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .container {
@@ -63,63 +72,82 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 48px;
+      gap: 40px;
       padding: 40px 20px;
       text-align: center;
     }
 
-    /* 상단 서브 텍스트 */
+    /* ── 상단 태그 ── */
     .sub-title {
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 26px;
+      font-size: 13px;
       font-weight: 700;
-      color: rgba(180, 200, 255, 0.9);
+      color: rgba(232,245,51,0.85);
       letter-spacing: 6px;
       text-transform: uppercase;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(232,245,51,0.3);
+      border-radius: 100px;
+      padding: 6px 20px;
     }
 
-    /* LP 플레이어 래퍼 */
+    /* ── LP 래퍼 ── */
     .lp-wrapper {
       position: relative;
-      width: 320px;
-      height: 320px;
+      width: 300px;
+      height: 300px;
     }
 
-    /* 외부 글로우 링 */
+    /* 외부 글로우 — 옐로우 그린 */
     .lp-glow {
       position: absolute;
-      inset: -20px;
+      inset: -24px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(100, 140, 255, 0.15) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(232,245,51,0.18) 0%, rgba(157,212,74,0.08) 50%, transparent 70%);
       animation: glowPulse 3s ease-in-out infinite;
     }
     @keyframes glowPulse {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.08); opacity: 1; }
+      0%, 100% { transform: scale(1);    opacity: 0.6; }
+      50%       { transform: scale(1.1); opacity: 1;   }
     }
 
-    /* LP 레코드 본체 */
+    /* 사운드 웨이브 */
+    .sound-waves { position: absolute; inset: -40px; border-radius: 50%; pointer-events: none; }
+    .wave-ring {
+      position: absolute;
+      inset: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(232,245,51,0.25);
+      animation: waveExpand var(--delay, 2s) ease-out infinite;
+    }
+    .wave-ring:nth-child(2) { --delay: 2.7s; }
+    .wave-ring:nth-child(3) { --delay: 3.4s; }
+    @keyframes waveExpand {
+      0%   { transform: scale(1); opacity: 0.5; }
+      100% { transform: scale(2); opacity: 0;   }
+    }
+
+    /* LP 레코드 */
     .lp-record {
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      animation: spinRecord 4s linear infinite;
+      animation: spinRecord 5s linear infinite;
       cursor: pointer;
     }
-
     @keyframes spinRecord {
       from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      to   { transform: rotate(360deg); }
     }
-
-    /* SVG 레코드 */
     .lp-record svg {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 0 20px rgba(80, 120, 255, 0.4)) drop-shadow(0 0 40px rgba(60, 80, 200, 0.2));
+      filter:
+        drop-shadow(0 0 16px rgba(232,245,51,0.3))
+        drop-shadow(0 0 40px rgba(157,212,74,0.15));
     }
 
-    /* 바늘 (토암) */
+    /* 토암 */
     .tonearm {
       position: absolute;
       top: -10px;
@@ -131,292 +159,293 @@
       animation: tonearmSwing 4s ease-in-out infinite alternate;
     }
     @keyframes tonearmSwing {
-      0% { transform: rotate(-5deg); }
-      100% { transform: rotate(0deg); }
+      0%   { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg);  }
     }
 
-    /* 사운드 웨이브 이펙트 */
-    .sound-waves {
-      position: absolute;
-      inset: -40px;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .wave-ring {
-      position: absolute;
-      inset: 40px;
-      border-radius: 50%;
-      border: 1px solid rgba(100, 150, 255, 0.3);
-      animation: waveExpand var(--delay, 2s) ease-out infinite;
-    }
-    .wave-ring:nth-child(2) { --delay: 2.7s; }
-    .wave-ring:nth-child(3) { --delay: 3.4s; }
-    @keyframes waveExpand {
-      0% { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(2); opacity: 0; }
-    }
-
-    /* 메인 타이틀 */
+    /* ── 메인 타이틀 ── */
     .main-title {
       font-family: 'Noto Serif KR', serif;
-      font-size: clamp(22px, 5vw, 34px);
-      font-weight: 900;
+      font-size: clamp(28px, 7vw, 46px);
+      font-weight: 400;
       color: #ffffff;
-      line-height: 1.4;
-      letter-spacing: -0.5px;
-      text-shadow: 0 0 40px rgba(120, 160, 255, 0.5);
+      line-height: 1.25;
+      letter-spacing: 1px;
+      text-shadow:
+        0 2px 20px rgba(0,0,0,0.6),
+        0 0 60px rgba(232,245,51,0.2);
     }
     .main-title .highlight {
-      background: linear-gradient(135deg, #7eb3ff 0%, #c084fc 50%, #f472b6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #E8F533;
+      display: block;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+    .main-title .sub-line {
+      font-size: clamp(13px, 3vw, 18px);
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      letter-spacing: 3px;
+      margin-top: 10px;
+      display: block;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
-    /* CTA 버튼 */
+    /* ── CTA 버튼 ── */
     .cta-btn {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      padding: 18px 40px;
-      background: linear-gradient(135deg, #1a3a7a 0%, #2d1f5e 50%, #4a1942 100%);
-      border: 1px solid rgba(120, 160, 255, 0.4);
+      padding: 18px 44px;
+      background: #1E1E1E;
+      border: 1.5px solid #E8F533;
       border-radius: 60px;
-      color: #ffffff;
+      color: #E8F533;
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 1px;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 2px;
       text-decoration: none;
       position: relative;
       overflow: hidden;
-      transition: all 0.4s ease;
+      transition: all 0.3s ease;
       box-shadow:
-        0 0 30px rgba(80, 120, 255, 0.3),
-        0 4px 20px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        0 0 20px rgba(232,245,51,0.2),
+        0 4px 20px rgba(0,0,0,0.5);
     }
     .cta-btn::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(120,160,255,0.15) 0%, rgba(200,100,255,0.1) 100%);
+      background: #E8F533;
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.3s ease;
     }
-    .cta-btn:hover::before {
-      opacity: 1;
-    }
+    .cta-btn:hover::before { opacity: 1; }
     .cta-btn:hover {
-      transform: translateY(-3px) scale(1.02);
-      border-color: rgba(160, 200, 255, 0.7);
+      color: #1E1E1E;
+      transform: translateY(-3px) scale(1.03);
       box-shadow:
-        0 0 50px rgba(100, 140, 255, 0.5),
-        0 8px 30px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255,255,255,0.15);
+        0 0 40px rgba(232,245,51,0.5),
+        0 8px 28px rgba(0,0,0,0.5);
     }
-    .cta-btn:active {
-      transform: translateY(-1px) scale(0.99);
-    }
-
-    /* 버튼 아이콘 (뮤직 노트) */
-    .btn-icon {
-      width: 22px;
-      height: 22px;
+    .cta-btn:active { transform: translateY(-1px) scale(1.01); }
+    .cta-btn span { position: relative; z-index: 1; }
+    .btn-icon, .btn-arrow {
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      transition: stroke 0.3s;
+    }
+    .cta-btn:hover .btn-icon path,
+    .cta-btn:hover .btn-icon circle { stroke: #1E1E1E; }
+    .cta-btn:hover .btn-arrow path  { stroke: #1E1E1E; }
+    .cta-btn:hover .btn-arrow { transform: translateX(4px); }
+
+    /* ── 뮤지시스 로고 뱃지 ── */
+    .musisis-badge {
+      font-family: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      color: #1E1E1E;
+      background: #E8F533;
+      border-radius: 100px;
+      padding: 4px 14px;
+      letter-spacing: .1em;
     }
 
-    /* 버튼 화살표 */
-    .btn-arrow {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      opacity: 0.7;
-      transition: transform 0.3s ease;
-    }
-    .cta-btn:hover .btn-arrow {
-      transform: translateX(4px);
-      opacity: 1;
-    }
-
-    /* 하단 데코 */
+    /* ── 하단 데코 ── */
     .footer-deco {
       font-size: 11px;
-      color: rgba(150, 170, 220, 0.4);
-      letter-spacing: 3px;
+      color: rgba(232,245,51,0.35);
+      letter-spacing: 4px;
     }
 
-    /* 모바일 대응 */
     @media (max-width: 480px) {
-      .lp-wrapper { width: 260px; height: 260px; }
-      .cta-btn { padding: 16px 30px; font-size: 15px; }
+      .lp-wrapper { width: 250px; height: 250px; }
+      .cta-btn { padding: 16px 32px; font-size: 15px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 별빛 배경 -->
-  <div class="stars" id="stars"></div>
+  <!-- 배경 음표 -->
+  <div class="notes-bg">
+    <span class="note-p" style="left:8%;  top:12%; --nd:7s;  --dl:0s">♪</span>
+    <span class="note-p" style="left:88%; top:18%; --nd:5.5s; --dl:1.2s">♫</span>
+    <span class="note-p" style="left:5%;  top:65%; --nd:8s;  --dl:2.1s">♩</span>
+    <span class="note-p" style="left:92%; top:58%; --nd:6.5s; --dl:0.5s">♬</span>
+    <span class="note-p" style="left:50%; top:8%;  --nd:9s;  --dl:3s">♭</span>
+    <span class="note-p" style="left:75%; top:80%; --nd:5s;  --dl:1.7s">♮</span>
+    <span class="note-p" style="left:22%; top:80%; --nd:7.5s; --dl:0.8s">♯</span>
+    <span class="note-p" style="left:40%; top:88%; --nd:6s;  --dl:2.5s">♪</span>
+  </div>
+
+  <!-- 나무 실루엣 SVG -->
+  <svg class="trees-bg" viewBox="0 0 800 220" preserveAspectRatio="xMidYMax meet">
+    <polygon points="40,220 65,120 90,220"   fill="#0F3318"/>
+    <polygon points="32,185 65,90 98,185"    fill="#0A2810"/>
+    <rect x="59"  y="185" width="12" height="35" fill="#0F3318"/>
+    <polygon points="95,220 118,148 141,220"  fill="#0A2810"/>
+    <polygon points="90,198 118,128 146,198"  fill="#0F3318"/>
+    <rect x="112" y="198" width="10" height="22" fill="#0A2810"/>
+    <polygon points="290,220 322,108 354,220" fill="#0F3318"/>
+    <polygon points="282,172 322,72 362,172"  fill="#0A2810"/>
+    <polygon points="294,132 322,42 350,132"  fill="#0F3318"/>
+    <rect x="316" y="195" width="12" height="25" fill="#0A2810"/>
+    <polygon points="354,220 374,162 394,220" fill="#0A2810"/>
+    <polygon points="350,196 374,142 398,196" fill="#0F3318"/>
+    <rect x="368" y="196" width="10" height="24" fill="#0A2810"/>
+    <polygon points="590,220 616,130 642,220" fill="#0F3318"/>
+    <polygon points="584,188 616,104 648,188" fill="#0A2810"/>
+    <rect x="610" y="188" width="12" height="32" fill="#0F3318"/>
+    <polygon points="644,220 664,158 684,220" fill="#0A2810"/>
+    <polygon points="640,196 664,136 688,196" fill="#0F3318"/>
+    <rect x="658" y="196" width="10" height="24" fill="#0A2810"/>
+    <polygon points="714,220 734,150 754,220" fill="#0F3318"/>
+    <polygon points="710,194 734,128 758,194" fill="#0A2810"/>
+    <rect x="728" y="194" width="12" height="26" fill="#0F3318"/>
+    <rect x="0"   y="212" width="800" height="8"  fill="#0A2810"/>
+    <!-- 사람 실루엣 -->
+    <circle cx="195" cy="160" r="8" fill="#E8F533"/>
+    <path d="M187,170 Q180,190 182,210 L192,210 Q194,198 195,190 Q196,198 198,210 L208,210 Q210,190 203,170 Z" fill="#E8F533"/>
+    <line x1="182" y1="182" x2="174" y2="196" stroke="#E8F533" stroke-width="4" stroke-linecap="round"/>
+    <line x1="208" y1="182" x2="216" y2="172" stroke="#E8F533" stroke-width="4" stroke-linecap="round"/>
+  </svg>
 
   <div class="container">
-    <p class="sub-title">2026 &nbsp;·&nbsp; MUSISIS</p>
+
+    <!-- 상단 태그 -->
+    <p class="sub-title">2026 &nbsp;·&nbsp; <span class="musisis-badge">MUSISIS</span> &nbsp;·&nbsp; DOGO MUSIC FORESTIVAL</p>
 
     <!-- LP 플레이어 -->
     <div class="lp-wrapper">
       <div class="lp-glow"></div>
-
-      <!-- 사운드 웨이브 -->
       <div class="sound-waves">
         <div class="wave-ring"></div>
         <div class="wave-ring"></div>
         <div class="wave-ring"></div>
       </div>
 
-      <!-- 레코드 본체 (SVG) -->
+      <!-- LP 레코드 (SVG) — 그린 컬러로 교체 -->
       <div class="lp-record">
         <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <!-- 레코드 그라디언트 -->
             <radialGradient id="recordGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#2a2a3e"/>
-              <stop offset="30%" stop-color="#1a1a2e"/>
-              <stop offset="70%" stop-color="#0f0f1a"/>
-              <stop offset="100%" stop-color="#050508"/>
+              <stop offset="0%"   stop-color="#1a3020"/>
+              <stop offset="30%"  stop-color="#101e14"/>
+              <stop offset="70%"  stop-color="#080e09"/>
+              <stop offset="100%" stop-color="#030604"/>
             </radialGradient>
-            <!-- 그루브 그라디언트 -->
             <radialGradient id="grooveLight" cx="40%" cy="35%" r="60%">
-              <stop offset="0%" stop-color="rgba(100,130,255,0.12)"/>
+              <stop offset="0%"   stop-color="rgba(157,212,74,0.14)"/>
               <stop offset="100%" stop-color="transparent"/>
             </radialGradient>
-            <!-- 라벨 그라디언트 -->
             <radialGradient id="labelGrad" cx="50%" cy="40%" r="55%">
-              <stop offset="0%" stop-color="#1e3a6e"/>
-              <stop offset="40%" stop-color="#162b55"/>
-              <stop offset="100%" stop-color="#0d1f3c"/>
+              <stop offset="0%"   stop-color="#2D8A3E"/>
+              <stop offset="40%"  stop-color="#1E6B2E"/>
+              <stop offset="100%" stop-color="#0F3318"/>
             </radialGradient>
-            <!-- 중앙 홀 -->
             <radialGradient id="holeGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#1a1a2e"/>
-              <stop offset="100%" stop-color="#050508"/>
+              <stop offset="0%"   stop-color="#1a3020"/>
+              <stop offset="100%" stop-color="#030604"/>
             </radialGradient>
-            <!-- 반사광 -->
             <linearGradient id="shineGrad" x1="20%" y1="10%" x2="80%" y2="90%">
-              <stop offset="0%" stop-color="rgba(255,255,255,0.06)"/>
-              <stop offset="50%" stop-color="rgba(255,255,255,0.02)"/>
+              <stop offset="0%"   stop-color="rgba(255,255,255,0.07)"/>
+              <stop offset="50%"  stop-color="rgba(255,255,255,0.02)"/>
               <stop offset="100%" stop-color="transparent"/>
             </linearGradient>
           </defs>
 
           <!-- 레코드 베이스 -->
-          <circle cx="150" cy="150" r="148" fill="url(#recordGrad)" stroke="#1a1a2e" stroke-width="1"/>
+          <circle cx="150" cy="150" r="148" fill="url(#recordGrad)" stroke="#1a3020" stroke-width="1"/>
 
-          <!-- 그루브 라인들 (촘촘하게) -->
-          <circle cx="150" cy="150" r="145" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="140" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="134" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="128" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="122" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="116" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="110" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="104" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="98" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="92" fill="none" stroke="rgba(80,100,180,0.1)" stroke-width="0.5"/>
-          <circle cx="150" cy="150" r="86" fill="none" stroke="rgba(80,100,180,0.08)" stroke-width="0.5"/>
+          <!-- 그루브 라인 -->
+          <circle cx="150" cy="150" r="145" fill="none" stroke="rgba(157,212,74,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="140" fill="none" stroke="rgba(157,212,74,0.10)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="134" fill="none" stroke="rgba(157,212,74,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="128" fill="none" stroke="rgba(157,212,74,0.10)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="122" fill="none" stroke="rgba(157,212,74,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="116" fill="none" stroke="rgba(157,212,74,0.10)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="110" fill="none" stroke="rgba(157,212,74,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="104" fill="none" stroke="rgba(157,212,74,0.10)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="98"  fill="none" stroke="rgba(157,212,74,0.08)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="92"  fill="none" stroke="rgba(157,212,74,0.10)" stroke-width="0.5"/>
+          <circle cx="150" cy="150" r="86"  fill="none" stroke="rgba(157,212,74,0.08)" stroke-width="0.5"/>
 
-          <!-- 그루브 반사광 -->
           <circle cx="150" cy="150" r="148" fill="url(#grooveLight)"/>
 
-          <!-- 레코드 라벨 (중앙 원) -->
+          <!-- 라벨 (그린) -->
           <circle cx="150" cy="150" r="60" fill="url(#labelGrad)"/>
-          <circle cx="150" cy="150" r="60" fill="none" stroke="rgba(100,150,255,0.3)" stroke-width="1"/>
+          <circle cx="150" cy="150" r="60" fill="none" stroke="rgba(232,245,51,0.35)" stroke-width="1.5"/>
+          <circle cx="150" cy="150" r="55" fill="none" stroke="rgba(232,245,51,0.12)" stroke-width="0.5"/>
 
-          <!-- 라벨 내부 장식 -->
-          <circle cx="150" cy="150" r="55" fill="none" stroke="rgba(100,150,255,0.15)" stroke-width="0.5"/>
-
-          <!-- 라벨 텍스트 영역 -->
-          <text x="150" y="138" text-anchor="middle" fill="rgba(160,200,255,0.9)" font-size="8" font-family="sans-serif" letter-spacing="2" font-weight="bold">GYEONGNAM</text>
-          <text x="150" y="152" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-size="9.5" font-family="sans-serif" letter-spacing="1.5" font-weight="bold">MUSICIANS</text>
-          <text x="150" y="164" text-anchor="middle" fill="rgba(180,200,255,0.7)" font-size="6.5" font-family="sans-serif" letter-spacing="1">BASEBALL STADIUM</text>
-
-          <!-- 라벨 하단 장식선 -->
-          <line x1="120" y1="170" x2="180" y2="170" stroke="rgba(100,150,255,0.3)" stroke-width="0.5"/>
+          <!-- 라벨 텍스트 -->
+          <text x="150" y="136" text-anchor="middle" fill="rgba(232,245,51,0.9)" font-size="7.5" font-family="sans-serif" letter-spacing="2.5" font-weight="bold">GYEONGNAM</text>
+          <text x="150" y="150" text-anchor="middle" fill="#ffffff" font-size="10" font-family="sans-serif" letter-spacing="1.5" font-weight="bold">MUSICIANS</text>
+          <text x="150" y="163" text-anchor="middle" fill="rgba(232,245,51,0.65)" font-size="6" font-family="sans-serif" letter-spacing="1">DOGO MUSIC FORESTIVAL</text>
+          <line x1="118" y1="169" x2="182" y2="169" stroke="rgba(232,245,51,0.25)" stroke-width="0.5"/>
+          <text x="150" y="178" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="5.5" font-family="sans-serif" letter-spacing="1">2026 · MUSISIS</text>
 
           <!-- 중앙 홀 -->
-          <circle cx="150" cy="150" r="6" fill="url(#holeGrad)" stroke="rgba(100,150,255,0.4)" stroke-width="0.5"/>
-
-          <!-- 전체 반사광 오버레이 -->
+          <circle cx="150" cy="150" r="6" fill="url(#holeGrad)" stroke="rgba(232,245,51,0.5)" stroke-width="0.8"/>
           <circle cx="150" cy="150" r="148" fill="url(#shineGrad)"/>
         </svg>
       </div>
 
-      <!-- 토암 (바늘) -->
+      <!-- 토암 (바늘) — 그린 톤 -->
       <svg class="tonearm" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="armGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#b0c4ff"/>
-            <stop offset="100%" stop-color="#6080c0"/>
+            <stop offset="0%"   stop-color="#9DD44A"/>
+            <stop offset="100%" stop-color="#4a8020"/>
           </linearGradient>
         </defs>
-        <!-- 피벗 -->
-        <circle cx="70" cy="10" r="6" fill="#8090b0" stroke="#c0d0f0" stroke-width="1"/>
-        <circle cx="70" cy="10" r="3" fill="#c0d0f0"/>
-        <!-- 암 -->
+        <circle cx="70" cy="10" r="6" fill="#3a6018" stroke="#9DD44A" stroke-width="1"/>
+        <circle cx="70" cy="10" r="3" fill="#9DD44A"/>
         <path d="M70,16 Q55,40 35,80 L30,95" stroke="url(#armGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <!-- 헤드쉘 -->
-        <rect x="22" y="92" width="14" height="7" rx="2" fill="#8090b0" stroke="#c0d0f0" stroke-width="0.5" transform="rotate(-10, 29, 95)"/>
-        <!-- 바늘 -->
-        <line x1="29" y1="99" x2="28" y2="107" stroke="#e0e8ff" stroke-width="1.5" stroke-linecap="round"/>
+        <rect x="22" y="92" width="14" height="7" rx="2" fill="#3a6018" stroke="#9DD44A" stroke-width="0.5" transform="rotate(-10, 29, 95)"/>
+        <line x1="29" y1="99" x2="28" y2="107" stroke="#E8F533" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
     </div>
 
     <!-- 메인 타이틀 -->
     <h1 class="main-title">
-      <span class="highlight">야구장에서 만나는</span><br/>
+      <span class="highlight">페스티벌에서 만나는</span>
       경남뮤지션
+      <span class="sub-line">도고뮤직포레스티발 × MUSISIS</span>
     </h1>
 
     <!-- CTA 버튼 -->
-    <a class="cta-btn" href="https://www.youtube.com/playlist?list=PLG-k_d9nkrm7FxQxbEFRhQvudkYKtLC7G" target="_blank" rel="noopener noreferrer">
+    <a class="cta-btn"
+       href="https://www.youtube.com/playlist?list=PLG-k_d9nkrm7FxQxbEFRhQvudkYKtLC7G"
+       target="_blank"
+       rel="noopener noreferrer">
       <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 18V5l12-2v13" stroke="rgba(180,210,255,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="6" cy="18" r="3" stroke="rgba(180,210,255,0.9)" stroke-width="1.5"/>
-        <circle cx="18" cy="16" r="3" stroke="rgba(180,210,255,0.9)" stroke-width="1.5"/>
+        <path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="6"  cy="18" r="3" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.8"/>
       </svg>
-      플레이리스트 듣기
+      <span>플레이리스트 듣기</span>
       <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5 12h14M13 6l6 6-6 6" stroke="rgba(180,210,255,0.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </a>
 
-    <p class="footer-deco">♪ &nbsp; LIVE MUSIC &nbsp; · &nbsp; ENJOY THE GAME &nbsp; ♪</p>
+    <p class="footer-deco">♪ &nbsp; LIVE MUSIC &nbsp; · &nbsp; FEEL THE FOREST &nbsp; ♪</p>
   </div>
 
   <script>
-    // 별빛 생성
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 80; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      const size = Math.random() * 2.5 + 0.5;
-      star.style.cssText = `
-        width: ${size}px;
-        height: ${size}px;
-        left: ${Math.random() * 100}%;
-        top: ${Math.random() * 100}%;
-        --dur: ${Math.random() * 3 + 2}s;
-        --op: ${Math.random() * 0.5 + 0.2};
-        animation-delay: ${Math.random() * 4}s;
-      `;
-      starsContainer.appendChild(star);
-    }
-
     // LP 클릭 시 속도 변화
     const lpRecord = document.querySelector('.lp-record');
     let fast = false;
     lpRecord.addEventListener('click', () => {
       fast = !fast;
-      lpRecord.style.animationDuration = fast ? '1s' : '4s';
+      lpRecord.style.animationDuration = fast ? '1s' : '5s';
     });
   </script>
+
 </body>
 </html>
